@@ -5,10 +5,11 @@ int main(){
     char *ptr = word;
     vector<Production*> todos;
 
+    Grammar gramatica;
     string input = "2 + 3 * 4";
 
     while(cin.getline(word,50,'\n')){
-        lectura(ptr, todos);
+        lectura(ptr, gramatica);
     }
 
 

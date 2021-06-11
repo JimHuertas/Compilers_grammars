@@ -20,7 +20,7 @@ void printProductions(vector<string> prod, string name){
 }
 
 
-void lectura(char *ptr, vector<Production*> &total_prod){
+void lectura(char *ptr, Grammar &gramatica){
     int cont=0;
     vector<vector<string>> produc; 
     string aux;
@@ -55,7 +55,7 @@ void lectura(char *ptr, vector<Production*> &total_prod){
 
     for(int k=0; k<produc.size(); k++){
         Production aux_p(produc[k].size(), produc[k], izquierda);
-        total_prod.push_back(&aux_p);
+        gramatica.addNewGrammar(aux_p);
         printProductions(aux_p.getProductions(), aux_p.getIzquierda());
     }
     cout<<endl;
