@@ -1,7 +1,6 @@
-#ifndef LECTURA_GRAMMAR_H
-#define LECTURA_GRAMMAR_H
-#include "production.h"
-
+#ifndef READ_GRAMMAR_H
+#define READ_GRAMMAR_H
+#include "grammar.h"
 string toString(char *&ptr){
     string txt;
     while(*ptr != '>' && *ptr != '\"'){
@@ -12,57 +11,54 @@ string toString(char *&ptr){
     return txt;
 }
 
-void printProductions(vector<string> prod){
+void printProductions(vector<string> prod, string name){
+    cout<<name<<" -> ";
     for(int i=0; i<prod.size(); i++){
-        cout<<prod[i]<<endl;
+        cout<<prod[i]<<"  ";
     }
+    cout<<endl;
 }
 
 
 void lectura(char *ptr, vector<Production*> &total_prod){
     int cont=0;
-    vector<vector<string>> produc;
+    vector<vector<string>> produc; 
     string aux;
+    string izquierda;
     while(*ptr != '\0'){
-        cout<<"ENTRO AL WHILE: "<<*ptr<<endl;
         vector<string> unique_prod;
         if(*ptr == '<'){
             ptr++;
-            aux = toString(ptr);
-            cout<<aux<<" - Tambien el ptr esta en: \""<<*(ptr+1)<<"\""<<endl;
+            izquierda = toString(ptr);
         } else if((*ptr == ':' && *(ptr+1)==':') || *(ptr-1)== '|'){
-            cout<<"Cumplio ::"<<endl;
             while(*ptr != '\0'){
-                cout<<"entro al 2do while   -  "<<*ptr<<endl;
                 if(*ptr == '<' || *ptr == '\"'){
                     ptr++;
                     aux = toString(ptr);
                     unique_prod.push_back(aux);
                     cont++;
-                    cout<<"Production: "<<aux<<endl;
-                }
-                else if(*ptr == '|'){
-                    cout<<"encontro un | mira -> "<<*ptr<<endl;
-                    produc.push_back(unique_prod);
+                } else if(*ptr == '|'){
                     break;
                 }
                 if(*ptr=='\0'){break;}//verificación 1
                 ptr++; 
             }
+            produc.push_back(unique_prod);
         }
         if(*ptr=='\0'){break;}//verificación 2
-        ptr++;
+        ptr++;  
     }
+
+
+    
+
 
     for(int k=0; k<produc.size(); k++){
-        cout<<"Entro al for :o"<<endl;
-        Production aux(produc[k].size(), produc[k]);
-        Production *ptr = &aux;
-        total_prod.push_back(ptr);
-        printProductions(produc[k]);
+        Production aux_p(produc[k].size(), produc[k], izquierda);
+        total_prod.push_back(&aux_p);
+        printProductions(aux_p.getProductions(), aux_p.getIzquierda());
     }
-
-    cout<<endl<<endl<<endl;
+    cout<<endl;
 }
 
 
