@@ -12,6 +12,15 @@ int main(){
         lectura(ptr, gramatica);
     }
 
+    /*vector<string> gra = gramatica.getProductions(2);
+    for(int i=0; i<gra.size(); i++){
+        cout<<gra[i]<<"  ";
+    }cout<<endl;*/
+
+    vector<string> gra2 = gramatica.getPrimeros("S");
+    for(int i=0; i<gra2.size(); i++){
+        cout<<gra2[i]<<"  ";
+    }cout<<endl;
 
     return 0;
 }

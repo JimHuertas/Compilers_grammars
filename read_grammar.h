@@ -49,10 +49,6 @@ void lectura(char *ptr, Grammar &gramatica){
         ptr++;  
     }
 
-
-    
-
-
     for(int k=0; k<produc.size(); k++){
         Production aux_p(produc[k].size(), produc[k], izquierda);
         gramatica.addNewGrammar(aux_p);
