@@ -52,9 +52,7 @@ void lectura(char *ptr, Grammar &gramatica){
     for(int k=0; k<produc.size(); k++){
         Production aux_p(produc[k].size(), produc[k], izquierda);
         gramatica.addNewGrammar(aux_p);
-        printProductions(aux_p.getProductions(), aux_p.getIzquierda());
     }
-    cout<<endl;
 }
 
 

@@ -17,10 +17,14 @@ int main(){
         cout<<gra[i]<<"  ";
     }cout<<endl;*/
 
-    vector<string> gra2 = gramatica.getPrimeros("S");
-    for(int i=0; i<gra2.size(); i++){
-        cout<<gra2[i]<<"  ";
-    }cout<<endl;
+
+
+        cout<<"Primero (E): "<<endl;
+        vector<string> gra2 = gramatica.getSiguientes("F");
+        for(int j=0; j<gra2.size(); j++){
+            cout<<gra2[j]<<"  ";
+        }cout<<endl;
+
 
     return 0;
 }
