@@ -23,6 +23,7 @@ void agregarPila(stack<string> &pila, vector<string> &prods){
 }
 
 bool analiza(string cadena, Grammar gramatica){
+    cout<<"Cadena: "<<cadena<<endl;
     queue<string> entrada; //cola
     stack<string> pila; //pila
     pila.push("$");
@@ -31,7 +32,7 @@ bool analiza(string cadena, Grammar gramatica){
     agregarCadena(entrada, cadena);
 
     while(!pila.empty() && !entrada.empty()){
-        cout<<"Pila: "<<pila.top()<<"         Entrada: "<<entrada.front()<<endl;
+        //cout<<"Pila: "<<pila.top()<<"         Entrada: "<<entrada.front()<<endl;
         if(pila.top() == entrada.front()){
             entrada.pop();
             pila.pop();
