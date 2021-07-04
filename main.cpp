@@ -1,4 +1,7 @@
 #include "read_grammar.h"
+#include "analisIs_cadena.h"
+#include <queue>
+#include <stack>
 
 int main(){
     char word[50];
@@ -6,24 +9,30 @@ int main(){
     vector<Production*> todos;
 
     Grammar gramatica;
-    string input = "2 + 3 * 4";
+    string input = "id + id";
 
     while(cin.getline(word,50,'\n')){
         lectura(ptr, gramatica);
     }
 
-    /*vector<string> gra = gramatica.getProductions(2);
-    for(int i=0; i<gra.size(); i++){
-        cout<<gra[i]<<"  ";
-    }cout<<endl;*/
+    if(analiza(input, gramatica)){
+        cout<<"Si pertenece a la gramatica"<<endl;
+    } else{
+        cout<<"No Pertenece a la gramatica"<<endl;
+    }
 
 
 
-        cout<<"Primero (E): "<<endl;
-        vector<string> gra2 = gramatica.getSiguientes("F");
+    /*string izq[]={"E", "T", "E'", "T'", "F"};
+
+    for(int i=0; i<5; i++){
+        cout<<"Primero ("<<izq[i]<<"): "<<endl;
+        vector<string> gra2 = gramatica.getSiguientes(izq[i]);
         for(int j=0; j<gra2.size(); j++){
             cout<<gra2[j]<<"  ";
         }cout<<endl;
+    }*/
+    
 
 
     return 0;

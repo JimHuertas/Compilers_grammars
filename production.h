@@ -17,7 +17,7 @@ public:
     vector<string> getProductions(){ return productions; }
     int getCantProductions(){ return production_cant; }
     string getIzquierda(){ return izquierda;}
-    string getPrimero() {return productions[0];}
+    string getInicial() {return productions[0];}
 };
 
 Production::Production(){}

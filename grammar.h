@@ -2,6 +2,14 @@
 #define GRAMMAR_H
 #include "production.h"
 
+bool estaEnElVector(vector<string> vec, string izq){
+    for(int i=0; i<vec.size(); i++)
+        if(vec[i] == izq)
+            return true;
+    return false;
+}
+
+
 void eliminar(vector<string> &prod, string state){
     bool find = false;
     for(int i=0; i<prod.size(); i++){
@@ -13,24 +21,25 @@ void eliminar(vector<string> &prod, string state){
     if(find){prod.pop_back();}
 }
 
-void agregar(vector<string> &vec1, vector<string> &vec2){
-    for(int i=0; i<vec2.size(); i++)
-        vec1.push_back(vec2[i]);
+void agregar(vector<string> &siguientes, vector<string> &vec2){
+    for(int j=0; j<vec2.size(); j++)
+        if(!estaEnElVector(siguientes, vec2[j]))
+            siguientes.push_back(vec2[j]);
 }
 
-int reglas(vector<string> prod, string state){
-    if(prod.size()==2 && prod[prod.size()-1] == state)
+int reglas(Production prod, string state){
+    vector<string> derecha = prod.getProductions();
+    if(prod.getIzquierda() == state){return 0;}
+    else if(derecha[0] == state && derecha.size()==1){return 3;}
+    
+    for(int i=0; i<derecha.size();i++){
+        if(derecha[i] == state && i!=derecha.size()-1) 
+            return i+1;
+    }
+
+    if(derecha[derecha.size()-1] == state)
         return 3;
-    else if(prod.size()==3 && prod[prod.size()-2] == state)
-        return 2;
     return 0;
-}
-
-bool estaEnElVector(vector<string> vec, string izq){
-        for(int i=0; i<vec.size(); i++)
-            if(vec[i] == izq)
-                return true;
-        return false;
 }
 
 class Grammar{
@@ -45,6 +54,21 @@ public:
     vector<string> getProductions(int);
     vector<string> getPrimeros(string);
     vector<string> getSiguientes(string);
+    string getInicial(){ return productions[0].getIzquierda();}
+    vector<string> getAllProductions(string izq){
+        vector<string> a;
+        for(int i=0; i<productions.size(); i++)
+            if(productions[i].getIzquierda() == izq)
+                return productions[i].getProductions();
+        return a;
+    }
+    vector<string> getAllProductions(string izq, string nt){
+        vector<string> a;
+        for(int i=0; i<productions.size(); i++)
+            if(productions[i].getIzquierda() == izq && productions[i].getProductions()[0] == nt)
+                return productions[i].getProductions();
+        return a;
+    }
     bool esTerminal(string);
 
 };
@@ -79,12 +103,12 @@ vector<string> Grammar::getPrimeros(string txt){
     vector<string> primeros;
     for(int i=0; i<productions.size(); i++){
         if(productions[i].getIzquierda() == txt){
-            if(productions[i].getPrimero() != txt && !esTerminal(productions[i].getPrimero()))
-                primeros.push_back(productions[i].getPrimero());
-            else if(productions[i].getPrimero() == txt)
+            if(productions[i].getInicial() != txt && !esTerminal(productions[i].getInicial()))
+                primeros.push_back(productions[i].getInicial());
+            else if(productions[i].getInicial() == txt)
                 continue;
-            else if(esTerminal(productions[i].getPrimero()))
-                return getPrimeros(productions[i].getPrimero());
+            else if(esTerminal(productions[i].getInicial()))
+                return getPrimeros(productions[i].getInicial());
         }
     }
     if(primeros.size() == 0){ primeros.push_back(txt);}
@@ -92,28 +116,25 @@ vector<string> Grammar::getPrimeros(string txt){
 }
 
 vector<string> Grammar::getSiguientes(string txt){
-    cout<<"Production: "<<txt<<endl;
     vector<string> siguientes;
     if(productions[0].getIzquierda() == txt){
-        cout<<"entro"<<endl;
         siguientes.push_back("$");
     }
     for(int i=0; i<productions.size(); i++){
         if(estaEnElVector(productions[i].getProductions(), txt)){
-            if(reglas(productions[i].getProductions(), txt) == 2){
-                cout<<"cumplio regla 3 ->"<<txt<<endl;
-                string prod = productions[i].getProductions()[2];
+            int regla = reglas(productions[i], txt);
+            if(regla != 0 && regla != 3){
+                string prod = productions[i].getProductions()[regla];
                 vector<string> aux = getPrimeros(prod);
-                if(estaEnElVector(aux, "\'")){
-                    eliminar(aux, "\'");
+                if(estaEnElVector(aux, "\'\'")){
+                    eliminar(aux, "\'\'");
                     string prod = productions[i].getIzquierda();
                     vector<string> aux = getSiguientes(prod);
                     agregar(siguientes, aux);
                 }
                 agregar(siguientes, aux);
             }
-            else if(reglas(productions[i].getProductions(), txt) == 3){
-                cout<<"cumplio regla 2 ->"<<txt<<endl;
+            else if(regla == 3){
                 string prod = productions[i].getIzquierda();
                 vector<string> aux = getSiguientes(prod);
                 agregar(siguientes, aux);
